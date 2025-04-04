@@ -8,7 +8,7 @@ import ContactUs from './components/contact/contactUs'
 import {createBrowserRouter , RouterProvider } from "react-router-dom";
 import Premium from "./components/hero/premium";
 import Testimonials from './components/testimonials/testimonials'
-import Dashboard from './components/Dashboard/dashboard'
+import Dashboard from './components/Dashboard/Dashboard'
 // import GFG from './gfgprofile/Gfg'
 import LoginPage from './components/login/login'
 import { RegisterPage } from './components/register/register'

@@ -3,7 +3,7 @@ import { Link ,useNavigate} from 'react-router-dom';
 import logo from "../../assets/logo.png";
 import './navbar.css'
 import { GlobalContext } from '../..';
-import Dashboard from '../Dashboard/dashboard';
+import Dashboard from '../Dashboard/Dashboard';
 import Avatar from 'react-avatar';
 import { FaWindowRestore } from 'react-icons/fa';
 // import MobileNavbar from './mobileNavbar';
