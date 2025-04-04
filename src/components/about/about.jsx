@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import boostProfile from "../../assets/boostProfile.png";
 import addPlatform from "../../assets/addPlatforms.png";
 import dashboard from "../../assets/Dashboard.png";
-import "./About.css";
+import "./about.css";
 
 const images = [
   { url: boostProfile, title: "Boost Your Coding Profile" },
