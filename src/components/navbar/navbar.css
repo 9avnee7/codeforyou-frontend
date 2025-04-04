@@ -1,0 +1,69 @@
+.navlinks ul,
+.buttons button {
+  position: relative;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;  /* Or your preferred background color */
+  z-index: 10;  /* Ensure it stays on top of other content */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Optional: add shadow for better separation */
+}
+
+
+.navlinks ul::after,
+.buttons button::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -3px;
+  width: 0;
+  height: 2px;
+  background-color: #6C63FF;
+  transition: all 0.3s ease-in-out;
+  transform: translateX(-50%);
+}
+
+.navlinks ul:hover::after,
+.buttons button:hover::after {
+  width: 100%;
+}
+
+.navlinks ul:hover,
+.buttons button:hover {
+  color: #6C63FF;
+}
+
+@media (max-width:768px) {
+    .rightNav{
+      width: 70%;
+    }
+
+    .navLinks{
+      width: 80%;
+    }
+}
+
+@media (max-width:426px){
+  .navlinks{
+    display: none;
+  }
+  .mobileViewBar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* width: 100%; */
+  }
+  .rightNav{
+    row-gap: 30;
+  }
+  .buttonClass{
+    width: 100%;
+  }
+
+}

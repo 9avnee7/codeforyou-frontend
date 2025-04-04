@@ -1,0 +1,12 @@
+@media (max-width:768px){
+   .leftProfilePane{
+    width: 100%;
+   }
+
+}
+
+@media (max-width:490px){
+   .leftProfilePane{
+      width: 100%;
+   }
+}

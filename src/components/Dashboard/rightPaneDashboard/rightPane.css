@@ -1,0 +1,32 @@
+@media (max-width: 1024px) {
+    .firstRow {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .displayTotalQuestions, 
+    .displayTotalActiveDays,
+    .displaySubmissionStats {
+        width: 100%; /* Make them full width */
+    }
+}
+
+@media (max-width: 740px) {
+    .firstRowFirstComponent,
+    .secondRow {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .displayTotalQuestions, 
+    .displayTotalActiveDays, 
+    .displaySubmissionStats, 
+    .awardsSection, 
+    .awardsWrapper, 
+    .problemsStats {
+        width: 100%;
+    }
+    .doughnutContainer{
+        width: 80%;
+    }
+}

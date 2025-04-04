@@ -1,0 +1,30 @@
+.testimonialWrapper{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.testimonialContainer::-webkit-scrollbar{
+    display: none;
+}
+/* .testimonialCards{
+    overflow-x: auto;
+} */
+
+
+
+.testimonialHead::after {
+    content: "";
+    display: block;
+    width: 80px; /* Start with 0 width */
+    height: 4px;
+    background-color: #6C63FF;
+    margin: 10px auto;
+    border-radius: 5px;
+    /* transition: width 0.3s ease-in-out; Animate only width */
+}
+
+/* .testimonialHead:hover::after {
+    width: 80px;
+}
+ */

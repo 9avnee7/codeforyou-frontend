@@ -1,0 +1,164 @@
+/* addPlatform.css */
+
+/* General Styles */
+.addPlatformWrapper {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    padding: 2rem;
+}
+
+.addPlatformContainer {
+    width: 80%;
+    max-width: 900px;
+    background-color: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.addPlatformContainer:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Individual Platform Card */
+.individualCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9fafb;
+    padding: 1rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    gap: 1rem;
+}
+
+/* Platform Logo */
+.platformLogo {
+    flex-shrink: 0; /* Prevent shrinking */
+    width: 50px;
+    height: 50px;
+}
+
+.platformLogo img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Platform Name */
+.platformName {
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* URL Input */
+.urlContainer {
+    flex-grow: 1;
+    width: 100%;
+}
+
+.urlContainer input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+}
+
+.urlContainer input:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
+}
+
+/* Buttons */
+.verifyAndUpdateButton {
+    background-color: #3b82f6;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.verifyAndUpdateButton:hover {
+    background-color: #2563eb;
+}
+
+/* Icons */
+.fa-check-circle {
+    color: #10b981;
+    font-size: 1.5rem;
+}
+
+.fa-circle-exclamation {
+    color: #ef4444;
+    font-size: 1.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .addPlatformContainer {
+        width: 95%;
+        padding: 1.5rem;
+    }
+
+    .individualCard {
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .platformLogo {
+        width: 40px;
+        height: 40px;
+    }
+
+    .platformName {
+        font-size: 0.9rem;
+        text-align: center;
+    }
+
+    .verifyAndUpdateButton {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .addPlatformContainer {
+        padding: 1rem;
+    }
+
+    .individualCard {
+        flex-direction: column;
+        padding: 0.75rem;
+        text-align: center;
+    }
+
+    .platformLogo {
+        width: 35px;
+        height: 35px;
+    }
+
+    .platformName {
+        font-size: 0.85rem;
+    }
+
+    .urlContainer {
+        width: 100%;
+    }
+
+    .verifyAndUpdateButton {
+        width: 100%;
+    }
+}

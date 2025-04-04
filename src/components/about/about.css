@@ -1,0 +1,130 @@
+/* Container */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2%;
+    overflow: hidden;
+    height: 100%;
+  }
+  
+  /* Wrapper for transition */
+  .carousel-wrapper {
+    overflow: hidden;
+    height: 100%;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Image styling */
+  .carousel-image {
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+  
+  /* Title Styling */
+  .carousel-title {
+    position: absolute;
+    bottom: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    text-align: center;
+  }
+  
+  /* Navigation Buttons */
+  .carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: white;
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .carousel-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+  }
+  
+  .carousel-btn-left {
+    left: 10px;
+  }
+  
+  .carousel-btn-right {
+    right: 10px;
+  }
+  
+  /* Icon Styling */
+  .icon {
+    width: 24px;
+    height: 24px;
+    color: #333;
+  }
+  
+  /* RESPONSIVENESS */
+  
+  /* Tablets */
+  @media (max-width: 768px) {
+    .carousel-image {
+      height: 320px;
+    }
+  
+    .carousel-title {
+      font-size: 1rem;
+      padding: 8px 12px;
+    }
+  
+    .carousel-btn {
+      padding: 8px;
+    }
+  
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+  }
+  
+  /* Mobile */
+  @media (max-width: 480px) {
+    .carousel-container {
+      max-width: 90%;
+    }
+  
+    .carousel-image {
+      height: 250px;
+    }
+  
+    .carousel-title {
+      font-size: 0.9rem;
+      padding: 6px 10px;
+    }
+  
+    .carousel-btn {
+      padding: 6px;
+    }
+  
+    .icon {
+      width: 18px;
+      height: 18px;
+    }
+  
+    .carousel-btn-left {
+      left: 5px;
+    }
+  
+    .carousel-btn-right {
+      right: 5px;
+    }
+  }
+  

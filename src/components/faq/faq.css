@@ -1,0 +1,13 @@
+.faqHead::after {
+    content: "";
+    display: block;
+    width: 160px; /* Start with 0 width */
+    height: 4px;
+    background-color: #6C63FF;
+    margin: 10px auto;
+    border-radius: 5px;
+    /* transition: width 0.3s ease-in-out; Animate only width */
+}
+.faqContainer{
+    padding-top: 5%;
+}

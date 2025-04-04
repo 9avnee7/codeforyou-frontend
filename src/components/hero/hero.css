@@ -1,0 +1,87 @@
+/* Wrapper Styling */
+.heroWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+    background-color: white;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .heroTitle {
+    font-size: 3rem;
+    font-weight: bold;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 15px;
+    position: relative;
+  }
+  
+  .heroTitle::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: black;
+    margin: 10px auto;
+    border-radius: 5px;
+  }
+  
+  .heroSubtitle {
+    font-size: 1.2rem;
+    color: #444;
+    max-width: 600px;
+    line-height: 1.6;
+  }
+  
+  /* Button Container */
+  .buttonContainer {
+    display: flex;
+    gap: 20px;
+    margin-top: 30px;
+  }
+  
+  /* Button Styles */
+  .getStarted, .premium {
+    padding: 12px 24px;
+    font-size: 1rem;
+    font-weight: bold;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Get Started Button */
+  .getStarted {
+    background-color: #6C63FF;
+    color: white;
+    border: 2px solid #6C63FF;
+  }
+  
+  .getStarted:hover {
+    background-color: white;
+    color: #6C63FF;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 123, 255, 0.3);
+  }
+  
+  /* Premium Button */
+  .premium {
+    background-color: #ffc107;
+    color: #333;
+    border: 2px solid #ffc107;
+  }
+  
+  .premium:hover {
+    background-color: white;
+    color: #ffc107;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(255, 193, 7, 0.3);
+  }
+  
