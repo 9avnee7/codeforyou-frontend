@@ -250,7 +250,7 @@ const GlobalState = ({ children }) => {
         if(platformname.toLowerCase()==='leetcode'){
         console.log("posting  leetcode data to databse");
         // const username='iheretocode';
-        const res=await fetch(`http://localhost:4000/scrape/leetcode?username=${username}`,{
+        const res=await fetch(`${import.meta.env.VITE_LEETCODE_SCRAP_URL}/scrape/leetcode?username=${username}`,{
           method:'GET',
           headers:{'Content-Type':'application/json'}
         })
