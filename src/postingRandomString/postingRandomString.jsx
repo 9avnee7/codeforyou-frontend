@@ -9,7 +9,7 @@ const PostingRandomString = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:3000/fetch-random-string");
+      const res = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/fetch-random-string`);
       const data = await res.json();
       const fetchedString = data.randomString;  // Temporary variable
       setRandomString(fetchedString);
@@ -23,7 +23,7 @@ const PostingRandomString = () => {
       if (hour === "7" && meridiem === "PM") {
         console.log("Entering if condition");
 
-        const postUrl = "http://localhost:3000/string/postOrUpdateRandomString";
+        const postUrl = `${import.meta.env.VITE_API_GATEWAY_URL}/string/postOrUpdateRandomString`;
 
         const postRes = await fetch(postUrl, {
           method: "POST",

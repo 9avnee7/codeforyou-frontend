@@ -257,7 +257,7 @@ function App() {
 const refresh = async () => {
     try {
         console.log("Refreshing token on refresh");
-        const res = await fetch("http://localhost:3002/api/user/refresh", {
+        const res = await fetch(`${import.meta.env.VITE_IDENTITY_SERVICE_URL}/api/user/refresh`, {
             method: "POST",
             credentials: "include",
         });
@@ -272,7 +272,7 @@ const refresh = async () => {
           console.log("userinfor from session",userInfoFromSessionStorage)
 
             if (res.ok) {
-                const userDataResponse = await fetch("http://localhost:3002/api/user/fetchuserdata", {
+                const userDataResponse = await fetch(`${import.meta.env.VITE_IDENTITY_SERVICE_URL}/api/user/fetchuserdata`, {
                     method: "GET",
                     credentials: "include",
                     headers: {

@@ -24,7 +24,7 @@ const AddFeedback = () => {
 
     try {
 
-      const res = await fetch("http://localhost:3002/api/feedback/post-feedback", {
+      const res = await fetch(`${import.meta.env.VITE_IDENTITY_SERVICE_URL}/api/feedback/post-feedback`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

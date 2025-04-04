@@ -47,7 +47,7 @@ const GlobalState = ({ children }) => {
 
     async function fetchSubmissions(activeYears, handle, requestType) {
         const promises = activeYears.map(year =>
-            fetch(`http://localhost:3000/api/gfg-user/submission/${year}/${handle}/${requestType}`)
+            fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/api/gfg-user/submission/${year}/${handle}/${requestType}`)
                 .then(res => res.json())
         );
     
@@ -193,7 +193,7 @@ const GlobalState = ({ children }) => {
 
             }
 
-            const postRes=await fetch('http://localhost:3003/api/platform/postcodeforcesdata',{
+            const postRes=await fetch(`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/postcodeforcesdata`,{
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({
@@ -229,7 +229,7 @@ const GlobalState = ({ children }) => {
                     contestDetails
                 }
 
-                const postRes=await fetch('http://localhost:3003/api/platform/postcodeforcesdata',{
+                const postRes=await fetch(`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/postcodeforcesdata`,{
                     method:'POST',
                     headers:{'Content-Type':'application/json'},
                     body:JSON.stringify({
@@ -305,7 +305,7 @@ const GlobalState = ({ children }) => {
                 })),
                 totalActiveDays 
             }
-            const postRes=await fetch('http://localhost:3003/api/platform/postleetcodedata',{
+            const postRes=await fetch(`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/postleetcodedata`,{
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({
@@ -339,7 +339,7 @@ const GlobalState = ({ children }) => {
 
         // const username='kdev307';
         const stringId="67e37978e9e70b69e21a4fc4";
-        const randomStringRes=await fetch(`http://localhost:3000/string/fetchRandomString/${stringId}`)
+        const randomStringRes=await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/string/fetchRandomString/${stringId}`)
         let randomString="";
         
         if(randomStringRes.ok){
@@ -349,7 +349,7 @@ const GlobalState = ({ children }) => {
             console.log("randomString",randomString);
 
         }
-        const res = await fetch(`http://localhost:3000/api/gfg-user/${username}/${randomString}`);
+        const res = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/api/gfg-user/${username}/${randomString}`);
 
         if(res.ok){
         const data=await res.json();
@@ -401,7 +401,7 @@ const GlobalState = ({ children }) => {
 
         // console.log("resoonse is",response)
         try{
-        const postRes=await fetch('http://localhost:3003/api/platform/postgfgdata',{
+        const postRes=await fetch(`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/postgfgdata`,{
             method:'POST',
             headers:{'Content-Type':'application/json'},
             body:JSON.stringify({
@@ -441,7 +441,7 @@ const GlobalState = ({ children }) => {
         console.log("posting coding ninjas data from api to database");
         try{
             // const username='9av_neet';
-            const res = await fetch(`http://localhost:3000/api/ninja-user/${username}`);
+            const res = await fetch(`${import.meta.env.VITE_API_GATEWAY_URL}/api/ninja-user/${username}`);
             if(res.ok){
             const data=await res.json();
             console.log(data);
@@ -494,7 +494,7 @@ const GlobalState = ({ children }) => {
                     count:calendar[keys]?.total ||0
                 }))
             }
-            await fetch('http://localhost:3003/api/platform/postcodingninjasdata',{
+            await fetch(`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/postcodingninjasdata`,{
                 method:'POST',
                 headers:{'Content-Type':'application/json'},
                 body:JSON.stringify({
@@ -519,7 +519,7 @@ const GlobalState = ({ children }) => {
     console.log(userInfo?.userData?.username)
     console.log(userInfo)
 
-    const updateUserRes=await fetch('http://localhost:3002/api/user/updateUserPlatformDetails',{
+    const updateUserRes=await fetch(`${import.meta.env.VITE_IDENTITY_SERVICE_URL}/api/user/updateUserPlatformDetails`,{
         method:'POST',
         headers:{'Content-Type':'application/json'},
         credentials:"include",
@@ -608,7 +608,7 @@ const fetchDataFromDB=async(name,username)=>{
                 userPlatform=userPlatform.toLowerCase();
             }
             try{
-            const url=`http://localhost:3003/api/platform/fetch${userPlatform}datafromDB/${userUsername}`;
+            const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetch${userPlatform}datafromDB/${userUsername}`;
             const urlRes= await fetch(url,{
                 method:'GET'
             });
@@ -789,7 +789,7 @@ const fetchDataFromDB=async(name,username)=>{
 
     if(name.toLowerCase()==='leetcode'){
     // const username='iheretocode';
-    const url=`http://localhost:3003/api/platform/fetchleetcodedatafromDB/${username}`;
+    const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchleetcodedatafromDB/${username}`;
 
     const res=await fetch(url,{
         method:'GET'
@@ -839,7 +839,7 @@ const fetchDataFromDB=async(name,username)=>{
     //fetching gfg data from databse
     if(name.toLowerCase()==='geeksforgeeks'){
         // const username='kdev307';
-        const url=`http://localhost:3003/api/platform/fetchGFGdatafromDB/${username}`;
+        const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchGFGdatafromDB/${username}`;
     
         const res=await fetch(url,{
             method:'GET'
@@ -887,7 +887,7 @@ const fetchDataFromDB=async(name,username)=>{
         console.log('fetching coding ninjas data from database')
         try{
             // const username='9av_neet';
-            const url=`http://localhost:3003/api/platform/fetchcodingninjasdatafromDB/${username}`;
+            const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchcodingninjasdatafromDB/${username}`;
             setcodeforcesContestDetails([]);
             const res=await fetch(url,{
                 method:'GET'
@@ -949,7 +949,7 @@ const fetchDataFromDB=async(name,username)=>{
     }
     if(name.toLowerCase()==='codeforces'){
         // const username='iheretocode';
-        const url=`http://localhost:3003/api/platform/fetchcodeforcesdatafromDB/${username}`;
+        const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchcodeforcesdatafromDB/${username}`;
     
         const res=await fetch(url,{
             method:'GET'
