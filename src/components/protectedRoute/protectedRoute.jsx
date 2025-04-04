@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import { Navigate,Outlet } from 'react-router-dom'
 import { GlobalContext } from '../..'
-import Dashboard from '../dashboard/dashboard';
+import Dashboard from '../Dashboard/dashboard';
 import { set } from 'date-fns';
 
 const ProtectedRoute = () => {
