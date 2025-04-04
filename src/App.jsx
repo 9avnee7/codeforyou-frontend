@@ -3,9 +3,9 @@ import './App.css'
 import Navbar from './components/navbar/navbar'
 import Hero from './components/hero/hero'
 import About from './components/about/about'
-import Faq from './components/faq/faq'
+import Faq from './components/faq/Faq'
 import ContactUs from './components/contact/contactUs'
-import {createBrowserRouter , RouterProvider ,useNavigate} from "react-router-dom";
+import {createBrowserRouter , RouterProvider } from "react-router-dom";
 import Premium from "./components/hero/premium";
 import Testimonials from './components/testimonials/testimonials'
 import Dashboard from './components/dashboard/dashboard'
@@ -21,10 +21,9 @@ import AddFeedback from './addFeedback/addFeedback'
 // import DashboardHeatmap from './components/calendar/calendar'
 // import ChartTutorial from './components/charts/chart'
 // import TopicBarChart from './components/calendar/calendar'
-import { gapi } from 'gapi-script';
+
 import Addplatform from './components/Dashboard/addPlatform/addPlatform'
-import { elements } from 'chart.js'
-import AddProfile from './components/addProfile/addProfile'
+
 import HiUser from './components/hiPane/hi'
 import EditProfile from './components/EditProfile/editProfile'
 // import ApexChart from './components/contestChart/contestAreaChart'
