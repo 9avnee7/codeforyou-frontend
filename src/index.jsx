@@ -240,8 +240,7 @@ const GlobalState = ({ children }) => {
                 console.log(postRes);
 
             }
-            
-
+            localStorage.removeItem(platformname.toLowerCase());
         }
 
 
@@ -539,6 +538,7 @@ const GlobalState = ({ children }) => {
     const userData=updatedData
     if(updateUserRes.ok){
     sessionStorage.setItem('userInfo',JSON.stringify(userData));
+    localStorage.removeItem(platformname.toLowerCase());
     setUserInfo(updatedData)
     console.log("user info after updation in index,jsx",userInfo)
     setRightPaneLoading((prev=>({...prev,[platformname]:false})));
@@ -580,424 +580,386 @@ const fetchDataFromDB=async(name,username)=>{
     try{
     
    
-    if(name==='overall'){
-        let overallBadges=[];
-        let overallTotalActiveDays=0;
-        let dateSet=new Set();
-        let overallSubmissionCalendar=[];
-        let overallTotalProblemsSolved=0;
-        let overallContestDetails=[];
-        const userPlatformDetails=userInfo?.userData?.platformDetails;
-        let difficultySet=new Set();
-        let overallDifficultywiseAnalysis=[];
-        console.log('platform details')
-        console.log(userPlatformDetails);
-        const allCalendar=[];
-        let overallTopicwiseAnalysisData=[];
-
-        for (const data of userPlatformDetails) {
-            const userUsername=data.platformUsername;
-            let userPlatform=data.platformName;
-            if(userPlatform==="Coding Ninjas"){
-                userPlatform="codingninjas"
-            }
-            else if(userPlatform==="GeeksforGeeks"){
-                userPlatform="GFG";
-            }
-            else{
-                userPlatform=userPlatform.toLowerCase();
-            }
-            try{
-            const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetch${userPlatform}datafromDB/${userUsername}`;
-            const urlRes= await fetch(url,{
-                method:'GET'
-            });
-            
-            
-            const urlResData=await urlRes.json();
-            const fetchedData=urlResData?.data;
-            overallBadges=[...overallBadges,...urlResData?.data?.badges];
-            overallTotalActiveDays+=fetchedData.totalActiveDays;
-            const calendar=fetchedData?.submissionCalendar;
-
-            if(userPlatform==="codeforces"){
-                setcodeforcesContestDetails(urlResData?.data?.contestDetails);
-            }
-            else if(userPlatform==="codechef"){
-                setcodechefContestDetails(urlResData?.data?.contestDetails);
-            }
-            allCalendar.push(calendar)
-            calendar.map((data)=>{
-                dateSet.add(data.date)
-            })
-
-            overallTopicwiseAnalysisData=[...overallTopicwiseAnalysisData,...fetchedData?.topicWiseQSolved]
-            overallDifficultywiseAnalysis=[...overallDifficultywiseAnalysis,...fetchedData.totalQSolved];
-            overallTotalProblemsSolved+=fetchedData.totalProblemsSolved;
-
-         }
-         catch(e){
-            console.log("error occured on overall fetching");
-            console.log(e);
-         }
-         console.log("single",allCalendar)
-         
-             overallSubmissionCalendar=Array.from(dateSet).map((date)=>{
-                let total=0;
-
-                for(const calendar of allCalendar){
-                total+=calendar.filter((data)=>data.date==date)
-                .reduce((sum,data)=>sum+data.count,0);
-                
+        if (name === 'overall') {
+            let overallBadges = [];
+            let overallTotalActiveDays = 0;
+            let dateSet = new Set();
+            let overallSubmissionCalendar = [];
+            let overallTotalProblemsSolved = 0;
+            let overallContestDetails = [];
+            const userPlatformDetails = userInfo?.userData?.platformDetails;
+            let overallDifficultywiseAnalysis = [];
+            const allCalendar = [];
+            let overallTopicwiseAnalysisData = [];
+        
+            console.log('platform details');
+            console.log(userPlatformDetails);
+        
+            for (const data of userPlatformDetails) {
+                const userUsername = data.platformUsername;
+                let userPlatform = data.platformName;
+        
+                if (userPlatform === 'Coding Ninjas') {
+                    userPlatform = 'codingninjas';
+                } else if (userPlatform === 'GeeksforGeeks') {
+                    userPlatform = 'GFG';
+                } else {
+                    userPlatform = userPlatform.toLowerCase();
                 }
-                return {date,count:total};
-            })
-         
-         console.log("overallbadges",overallBadges)
- 
+        
+                const localStorageData = JSON.parse(localStorage.getItem(userPlatform));
+                let urlResData = null;
+        
+                if (localStorageData !== null) {
+                    urlResData = localStorageData;
+                } else {
+                    try {
+                        const url = `${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetch${userPlatform}datafromDB/${userUsername}`;
+                        const urlRes = await fetch(url, { method: 'GET' });
+        
+                        if (urlRes.ok) {
+                            urlResData = await urlRes.json();
+                            localStorage.setItem(userPlatform, JSON.stringify(urlResData));
+                        }
+                    } catch (e) {
+                        console.log('Error occurred on overall fetching');
+                        console.log(e);
+                    }
+                }
+        
+                if (urlResData) {
+                    const fetchedData = urlResData?.data;
+        
+                    overallBadges = [...overallBadges, ...(fetchedData?.badges || [])];
+                    overallTotalActiveDays += fetchedData.totalActiveDays || 0;
+                    const calendar = fetchedData?.submissionCalendar || [];
+        
+                    if (userPlatform === 'codeforces') {
+                        setcodeforcesContestDetails(fetchedData?.contestDetails || []);
+                    } else if (userPlatform === 'codechef') {
+                        setcodechefContestDetails(fetchedData?.contestDetails || []);
+                    }
+        
+                    allCalendar.push(calendar);
+        
+                    calendar.forEach((data) => {
+                        dateSet.add(data.date);
+                    });
+        
+                    overallTopicwiseAnalysisData = [
+                        ...overallTopicwiseAnalysisData,
+                        ...(fetchedData?.topicWiseQSolved || [])
+                    ];
+        
+                    overallDifficultywiseAnalysis = [
+                        ...overallDifficultywiseAnalysis,
+                        ...(fetchedData?.totalQSolved || [])
+                    ];
+        
+                    overallTotalProblemsSolved += fetchedData.totalProblemsSolved || 0;
+                }
+            }
+        
+            console.log('single', allCalendar);
+        
+            // Construct overallSubmissionCalendar
+            overallSubmissionCalendar = Array.from(dateSet).map((date) => {
+                let total = 0;
+        
+                for (const calendar of allCalendar) {
+                    total += calendar
+                        .filter((data) => data.date === date)
+                        .reduce((sum, data) => sum + data.count, 0);
+                }
+        
+                return { date, count: total };
+            });
+        
+            console.log('overallbadges', overallBadges);
+            console.log('overall days', overallTotalActiveDays);
+            console.log('overallDifficultywiseAnalysis', overallDifficultywiseAnalysis);
+        
+            setBadges(overallBadges);
+            setTotalActiveDays(overallTotalActiveDays);
+            setTotalProblemsSolved(overallTotalProblemsSolved);
+            setSubmissionCalendar(overallSubmissionCalendar);
+            setTopicWiseAnalysisData(overallTopicwiseAnalysisData);
+        
+            // Merge difficulty-wise data
+            const mergedDifficultywise = overallDifficultywiseAnalysis.reduce((acc, { QCategory, QCounts }) => {
+                if (QCategory === 'Moderate') QCategory = 'Medium';
+                if (QCategory === 'School' || QCategory === 'Basic') QCategory = 'Easy';
+        
+                if (!acc[QCategory]) {
+                    acc[QCategory] = { QCategory, QCounts };
+                } else {
+                    acc[QCategory].QCounts += QCounts;
+                }
+                return acc;
+            }, {});
+        
+            console.log('mergedDifficultywise', mergedDifficultywise);
+            setDifficultyWiseAnalysis(Object.values(mergedDifficultywise));
+        
+            // Sort calendar by date
+            overallSubmissionCalendar.sort(
+                (a, b) => new Date(a.date) - new Date(b.date)
+            );
+        
+            // Calculate current streak
+            let currentStreak = 0;
+            const todayStr = new Date().toISOString().split('T')[0];
+        
+            for (let i = overallSubmissionCalendar.length - 1; i >= 0; i--) {
+                const currentDate = overallSubmissionCalendar[i].date;
+                const current = new Date(currentDate);
+                const next = i < overallSubmissionCalendar.length - 1
+                    ? new Date(overallSubmissionCalendar[i + 1].date)
+                    : null;
+        
+                if (
+                    (i === overallSubmissionCalendar.length - 1 && currentDate === todayStr) ||
+                    (next && (next - current) / (1000 * 60 * 60 * 24) === 1)
+                ) {
+                    currentStreak++;
+                } else {
+                    break;
+                }
+            }
+        
+            setCurrentStreak(currentStreak);
         }
-        console.log(overallBadges)
-        console.log("overall days",overallTotalActiveDays)
-        console.log(overallDifficultywiseAnalysis)
-        setBadges(overallBadges);
-        setTotalActiveDays(overallTotalActiveDays)
-        setTotalProblemsSolved(overallTotalProblemsSolved)
-        console.log(overallSubmissionCalendar)
-        setSubmissionCalendar(overallSubmissionCalendar)
-        setTopicWiseAnalysisData(overallTopicwiseAnalysisData)
-        const mergedDifficultywise=overallDifficultywiseAnalysis.reduce((acc,{QCategory,QCounts})=>{
-            if(QCategory==='Moderate')
-                QCategory='Medium'
-        
-            if(QCategory==='School' || QCategory==='Basic')
-                QCategory='Easy'
-        
-            if(!acc[QCategory])
-                acc[QCategory]={QCategory,QCounts}
-            else
-                acc[QCategory].QCounts+=QCounts;
-            return acc;
-        },{});
-
-        console.log(mergedDifficultywise)
-        
-        setDifficultyWiseAnalysis(Object.values(mergedDifficultywise))
         
 
+
+        if (name.toLowerCase() === 'leetcode') {
+            const url = `${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchleetcodedatafromDB/${username}`;
+            const leetcodeData = JSON.parse(localStorage.getItem(name.toLowerCase()));
+            let data;
         
-//         const leetcodeUsername='iheretocode';
-//         const leetcodeUrl=`http://localhost:3003/api/platform/fetchleetcodedatafromDB/${leetcodeUsername}`;
-
-//         const leetcodeRes=await fetch(leetcodeUrl,{
-//             method:'GET'
-//         });
-
-//         const GFGUsername='kdev307';
-//         const GFGUrl=`http://localhost:3003/api/platform/fetchGFGdatafromDB/${GFGUsername}`;
-
-//         const GFGRes=await fetch(GFGUrl,{
-//             method:'GET'
-//         });
-
-
-//         const codingNinjaUsername='9av_neet';
-//         const codingNinjaUrl=`http://localhost:3003/api/platform/fetchcodingninjasdatafromDB/${codingNinjaUsername}`;
-
-//         const codingNinjaRes=await fetch(codingNinjaUrl,{
-//             method:'GET'
-//         });
-
-//         const leetcodeData=await leetcodeRes.json()
-//         console.log(leetcodeData);
-//         const codingNinjaData=await codingNinjaRes.json()
-//         console.log(codingNinjaData);
-//         const GFGData=await GFGRes.json()
-//         console.log(GFGData);
-
-//         const leetcodeBadges=leetcodeData?.data?.badges;
-//         const codingninjasBadges=codingNinjaData.data?.badges;
-
-//         const leetcodeSubmissionCalendar=leetcodeData?.data?.submissionCalendar;
-//         const codingninjaSubmissionCalendar=codingNinjaData?.data?.submissionCalendar;
-//         const GFGSubmissionCalendar=GFGData?.data?.submissionCalendar;
-
-
-//         const combineBadges=[...leetcodeBadges,...codingninjasBadges];
-//         setBadges(combineBadges);
-// {
-//         const combinedCalendar=[...leetcodeSubmissionCalendar,...codingninjaSubmissionCalendar,...GFGSubmissionCalendar]
-//         console.log("combined",combinedCalendar);}
-
-//         console.log(leetcodeSubmissionCalendar);
-//         // let combinedCalendar=[];
-
-//         const dateSet=new Set();
-//         // const co=[];
-        
-//         // console.log(leetcodeSubmissionCalendar.date);
-//         leetcodeSubmissionCalendar.map((data)=>{
-//             dateSet.add(data.date)
-//         })
-//         codingninjaSubmissionCalendar.map((data)=>{
-//             dateSet.add(data.date)
-//         })
-//         GFGSubmissionCalendar.map((data)=>{
-//             dateSet.add(data.date)
-//         })
-
-//         const combinedCalendar = Array.from(dateSet).map((date) => {
-//             let total = 0;
-        
-//             total += leetcodeSubmissionCalendar
-//                 .filter((data) => data.date === date)
-//                 .reduce((sum, data) => sum + data.count, 0);
-        
-//             total += codingninjaSubmissionCalendar
-//                 .filter((data) => data.date === date)
-//                 .reduce((sum, data) => sum + data.count, 0);
-        
-//             total += GFGSubmissionCalendar
-//                 .filter((data) => data.date === date)
-//                 .reduce((sum, data) => sum + data.count, 0);
-        
-//             return { date, count: total };
-//         });
-//         console.log(dateSet);
-//         console.log(combinedCalendar)
-//         setSubmissionCalendar(combinedCalendar)
-        overallSubmissionCalendar.sort((a, b) => a.date - b.date);
-        
-        let currentStreak = 0;
-        const today=new Date();
-        for (let i = overallSubmissionCalendar.length - 1; i >= 0; i--) {
-            if (
-                (i === overallSubmissionCalendar.length - 1 && overallSubmissionCalendar[i].date === today) ||
-                (i < overallSubmissionCalendar.length - 1 && 
-                 (new Date(overallSubmissionCalendar[i + 1].date) - new Date(overallSubmissionCalendar[i].date)) / (1000 * 60 * 60 * 24) === 1)
-            ) {
-                currentStreak++;
+            if (leetcodeData === null) {
+                try {
+                    const res = await fetch(url, { method: 'GET' });
+                    if (res.ok) {
+                        data = await res.json();
+                        localStorage.setItem(name.toLowerCase(), JSON.stringify(data));
+                    } else {
+                        console.error("Failed to fetch LeetCode data");
+                        return;
+                    }
+                } catch (e) {
+                    console.error("Error fetching LeetCode data", e);
+                    return;
+                }
             } else {
-                break;
-            }
-        }
-        setCurrentStreak(currentStreak); 
-        
-
-
-    }
-
-
-    if(name.toLowerCase()==='leetcode'){
-    // const username='iheretocode';
-    const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchleetcodedatafromDB/${username}`;
-
-    const res=await fetch(url,{
-        method:'GET'
-    });
-    setcodeforcesContestDetails([]);
-
-    const data=await res.json()
-    console.log(data);
-
-        setBadges(data?.data?.badges)
-        
-        if (data?.data?.submissionCalendar) {
-            const calendarData = data.data.submissionCalendar;
-            
-            calendarData.sort((a, b) => a.date - b.date);
-        
-            let currentStreak = 0;
-            for (let i = calendarData.length - 1; i >= 0; i--) {
-                if (i === calendarData.length - 1 || 
-                    (calendarData[i + 1].date - calendarData[i].date) / (1000 * 60 * 60 * 24) === 1) {
-                    currentStreak++;
-                } else {
-                    break;
-                }
+                data = leetcodeData;
             }
         
-            setSubmissionCalendar(calendarData);
-            setCurrentStreak(currentStreak); 
-            setTotalSubmission(calendarData.length);
-        } else {
-            console.warn("Submission calendar is missing in API response.");
-        }
-
-
-        setDifficultyWiseAnalysis(data?.data?.totalQSolved);
-        setTotalActiveDays(data.data.totalActiveDays);   
-        setLongestStreak(data.data.largestStreak);
-        setTopicWiseAnalysisData(data.data.topicWiseQSolved)
-        
-        console.log("difficulty wise")
-        setTotalProblemsSolved(data.data.totalProblemsSolved)
-
-        setlanguageWiseAnalysis(data?.data.languagesSolved);  
-    
-
-}
-    //fetching gfg data from databse
-    if(name.toLowerCase()==='geeksforgeeks'){
-        // const username='kdev307';
-        const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchGFGdatafromDB/${username}`;
-    
-        const res=await fetch(url,{
-            method:'GET'
-        });
-        setcodeforcesContestDetails([]);
-        const data=await res.json()
-        console.log(data);
-        setBadges(data?.data?.badges)
-        
-        if (data?.data?.submissionCalendar) {
-            const calendarData = data.data.submissionCalendar;
-            
-            calendarData.sort((a, b) => a.date - b.date);
-        
-            let currentStreak = 0;
-            for (let i = calendarData.length - 1; i >= 0; i--) {
-                if (i === calendarData.length - 1 || 
-                    (calendarData[i + 1].date - calendarData[i].date) / (1000 * 60 * 60 * 24) === 1) {
-                    currentStreak++;
-                } else {
-                    break;
-                }
-            }
-        
-            setSubmissionCalendar(calendarData);
-            setCurrentStreak(currentStreak); 
-            
-            setTotalSubmission(calendarData.length);
-        } else {
-            console.warn("Submission calendar is missing in API response.");
-        }
-        setTotalActiveDays(data.data.totalActiveDays);   
-        setLongestStreak(data.data.largestStreak);
-        setTopicWiseAnalysisData(data.data.topicWiseQSolved)
-        setDifficultyWiseAnalysis(data?.data?.totalQSolved)
-        // console.log(data.data.totalQSolved);
-        console.log("difficult wise gfg")
-        console.log(difficultyWiseAnalysis)
-        // console.log(data?.data.languagesSolved)
-        setlanguageWiseAnalysis(data?.data.languagesSolved)  
-        setTotalProblemsSolved(data.data.totalProblemsSolved)
-        // console.log(languageWiseAnalysis)
-    }
-    if(name.toLowerCase().trim()==='coding ninjas'){
-        console.log('fetching coding ninjas data from database')
-        try{
-            // const username='9av_neet';
-            const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchcodingninjasdatafromDB/${username}`;
             setcodeforcesContestDetails([]);
-            const res=await fetch(url,{
-                method:'GET'
-            });
-
         
-            const data=await res.json()
             console.log(data);
-            setBadges(data?.data?.badges)
-            
+        
+            setBadges(data?.data?.badges);
+        
+            // Handle submission calendar
             if (data?.data?.submissionCalendar) {
                 const calendarData = data.data.submissionCalendar;
-                
-                calendarData.sort((a, b) => a.date - b.date);
-            
+                calendarData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        
                 let currentStreak = 0;
                 for (let i = calendarData.length - 1; i >= 0; i--) {
-                    if (i === calendarData.length - 1 || 
-                        (calendarData[i + 1].date - calendarData[i].date) / (1000 * 60 * 60 * 24) === 1) {
+                    const current = new Date(calendarData[i].date);
+                    const next = i < calendarData.length - 1 ? new Date(calendarData[i + 1].date) : null;
+        
+                    if (i === calendarData.length - 1 || (next && (next - current) / (1000 * 60 * 60 * 24) === 1)) {
                         currentStreak++;
                     } else {
                         break;
                     }
                 }
-            
+        
                 setSubmissionCalendar(calendarData);
                 setCurrentStreak(currentStreak);
-                console.log(calendarData);
-                const totalSub = (calendarData ?? []).reduce((total, value) => {
-                    const count = Number(value.count); // Convert count to a number
-                    console.log(count);
-                    return total + (isNaN(count) ? 0 : count); // Ensure valid sum
-                }, 0);
-                console.log(totalSub)
-                
-                setTotalSubmission(`${totalSub} submissions Total`);
-            } else {
-                console.warn("Submission calendar is missing in API response.");
-            }
-                setTotalActiveDays(data?.data?.totalActiveDays);   
-                setLongestStreak(data.data.largestStreak);
-                setTopicWiseAnalysisData(data?.data?.topicWiseQSolved)
-                setDifficultyWiseAnalysis(data?.data?.totalQSolved)
-                // console.log(data.data.totalQSolved);
-                console.log("difficult wise gfg")
-                console.log(difficultyWiseAnalysis)
-                // console.log(data?.data.languagesSolved)
-                setlanguageWiseAnalysis(data?.data?.languagesSolved)  
-                setTotalProblemsSolved(data?.data?.totalProblemsSolved)
-                // console.log(languageWiseAnalysis)
-            
-            
-
-        }
-        catch(e){
-            alert("error occured while fetching coding ninjas data from database",e);
-        }
-
-    }
-    if(name.toLowerCase()==='codeforces'){
-        // const username='iheretocode';
-        const url=`${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchcodeforcesdatafromDB/${username}`;
-    
-        const res=await fetch(url,{
-            method:'GET'
-        });
-    
-        const data=await res.json()
-        console.log("codeforces",data);
-    
-            setBadges(data?.data?.badges)
-            
-            if (data?.data?.submissionCalendar) {
-                const calendarData = data.data.submissionCalendar;
-                
-                calendarData.sort((a, b) => a.date - b.date);
-            
-                let currentStreak = 0;
-                for (let i = calendarData.length - 1; i >= 0; i--) {
-                    if (i === calendarData.length - 1 || 
-                        (calendarData[i + 1].date - calendarData[i].date) / (1000 * 60 * 60 * 24) === 1) {
-                        currentStreak++;
-                    } else {
-                        break;
-                    }
-                }
-            
-                setSubmissionCalendar(calendarData);
-                setCurrentStreak(currentStreak); 
                 setTotalSubmission(calendarData.length);
             } else {
                 console.warn("Submission calendar is missing in API response.");
             }
-    
-    
-            setDifficultyWiseAnalysis(data?.data?.totalQSolved);
-            setTotalActiveDays(data.data.totalActiveDays);   
-            setLongestStreak(data.data.largestStreak);
-            setTopicWiseAnalysisData(data.data.topicWiseQSolved)
-            
-            console.log("difficulty wise")
-            setTotalProblemsSolved(data.data.totalProblemsSolved)
-    
-            setlanguageWiseAnalysis(data?.data.languagesSolved);  
-            setcodeforcesContestDetails(data?.data?.contestDetails)
-
-            
         
+            setDifficultyWiseAnalysis(data?.data?.totalQSolved);
+            setTotalActiveDays(data?.data?.totalActiveDays);
+            setLongestStreak(data?.data?.largestStreak);
+            setTopicWiseAnalysisData(data?.data?.topicWiseQSolved);
+            setTotalProblemsSolved(data?.data?.totalProblemsSolved);
+            setlanguageWiseAnalysis(data?.data?.languagesSolved);
+        }
+        
+    //fetching gfg data from databse
+    if (name.toLowerCase() === 'geeksforgeeks') {
+        const cacheKey = name.toLowerCase();
+        const url = `${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchGFGdatafromDB/${username}`;
     
+        let data;
+        const gfgData = JSON.parse(localStorage.getItem(cacheKey));
+        
+        if (!gfgData) {
+            const res = await fetch(url, { method: 'GET' });
+            if (!res.ok) throw new Error("Failed to fetch GFG data");
+            data = await res.json();
+            localStorage.setItem(cacheKey, JSON.stringify(data));
+        } else {
+            data = gfgData;
+        }
+    
+        setcodeforcesContestDetails([]);
+        console.log(data);
+    
+        setBadges(data?.data?.badges);
+    
+        if (data?.data?.submissionCalendar) {
+            const calendarData = data.data.submissionCalendar;
+    
+            calendarData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+            let currentStreak = 0;
+            for (let i = calendarData.length - 1; i >= 0; i--) {
+                const current = new Date(calendarData[i].date);
+                const next = i < calendarData.length - 1 ? new Date(calendarData[i + 1].date) : null;
+    
+                if (i === calendarData.length - 1 || (next && (next - current) / (1000 * 60 * 60 * 24) === 1)) {
+                    currentStreak++;
+                } else {
+                    break;
+                }
+            }
+    
+            setSubmissionCalendar(calendarData);
+            setCurrentStreak(currentStreak);
+            setTotalSubmission(calendarData.length);
+        } else {
+            console.warn("Submission calendar is missing in GFG response.");
+        }
+    
+        setTotalActiveDays(data?.data?.totalActiveDays);
+        setLongestStreak(data?.data?.largestStreak);
+        setTopicWiseAnalysisData(data?.data?.topicWiseQSolved);
+        setDifficultyWiseAnalysis(data?.data?.totalQSolved);
+        setlanguageWiseAnalysis(data?.data?.languagesSolved);
+        setTotalProblemsSolved(data?.data?.totalProblemsSolved);
     }
+    
+    if (name.toLowerCase().trim() === 'coding ninjas') {
+        console.log('Fetching Coding Ninjas data from database...');
+        const cacheKey = name.toLowerCase();
+        const url = `${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchcodingninjasdatafromDB/${username}`;
+    
+        let data;
+        const ninjasData = JSON.parse(localStorage.getItem(cacheKey));
+    
+        if (!ninjasData) {
+            const res = await fetch(url, { method: 'GET' });
+            if (!res.ok) throw new Error("Failed to fetch Coding Ninjas data");
+            data = await res.json();
+            localStorage.setItem(cacheKey, JSON.stringify(data));
+        } else {
+            data = ninjasData;
+        }
+    
+        setcodeforcesContestDetails([]);
+        console.log(data);
+    
+        setBadges(data?.data?.badges);
+    
+        if (data?.data?.submissionCalendar) {
+            const calendarData = data.data.submissionCalendar;
+    
+            calendarData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+            let currentStreak = 0;
+            for (let i = calendarData.length - 1; i >= 0; i--) {
+                const current = new Date(calendarData[i].date);
+                const next = i < calendarData.length - 1 ? new Date(calendarData[i + 1].date) : null;
+    
+                if (i === calendarData.length - 1 || (next && (next - current) / (1000 * 60 * 60 * 24) === 1)) {
+                    currentStreak++;
+                } else {
+                    break;
+                }
+            }
+    
+            setSubmissionCalendar(calendarData);
+            setCurrentStreak(currentStreak);
+    
+            const totalSub = calendarData.reduce((total, value) => {
+                const count = Number(value.count);
+                return total + (isNaN(count) ? 0 : count);
+            }, 0);
+    
+            setTotalSubmission(`${totalSub} submissions Total`);
+        } else {
+            console.warn("Submission calendar is missing in Coding Ninjas response.");
+        }
+    
+        setTotalActiveDays(data?.data?.totalActiveDays);
+        setLongestStreak(data?.data?.largestStreak);
+        setTopicWiseAnalysisData(data?.data?.topicWiseQSolved);
+        setDifficultyWiseAnalysis(data?.data?.totalQSolved);
+        setlanguageWiseAnalysis(data?.data?.languagesSolved);
+        setTotalProblemsSolved(data?.data?.totalProblemsSolved);
+    }
+    
+    if (name.toLowerCase() === 'codeforces') {
+        const cacheKey = name.toLowerCase();
+        const url = `${import.meta.env.VITE_PLATFORM_SERVICES_URL}/api/platform/fetchcodeforcesdatafromDB/${username}`;
+    
+        let data;
+        const cfData = JSON.parse(localStorage.getItem(cacheKey));
+    
+        if (!cfData) {
+            const res = await fetch(url, { method: 'GET' });
+            if (!res.ok) throw new Error("Failed to fetch Codeforces data");
+            data = await res.json();
+            localStorage.setItem(cacheKey, JSON.stringify(data));
+        } else {
+            data = cfData;
+        }
+    
+        console.log("Codeforces", data);
+    
+        setBadges(data?.data?.badges);
+    
+        if (data?.data?.submissionCalendar) {
+            const calendarData = data.data.submissionCalendar;
+    
+            calendarData.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+            let currentStreak = 0;
+            for (let i = calendarData.length - 1; i >= 0; i--) {
+                const current = new Date(calendarData[i].date);
+                const next = i < calendarData.length - 1 ? new Date(calendarData[i + 1].date) : null;
+    
+                if (i === calendarData.length - 1 || (next && (next - current) / (1000 * 60 * 60 * 24) === 1)) {
+                    currentStreak++;
+                } else {
+                    break;
+                }
+            }
+    
+            setSubmissionCalendar(calendarData);
+            setCurrentStreak(currentStreak);
+            setTotalSubmission(calendarData.length);
+        } else {
+            console.warn("Submission calendar is missing in Codeforces response.");
+        }
+    
+        setDifficultyWiseAnalysis(data?.data?.totalQSolved);
+        setTotalActiveDays(data?.data?.totalActiveDays);
+        setLongestStreak(data?.data?.largestStreak);
+        setTopicWiseAnalysisData(data?.data?.topicWiseQSolved);
+        setTotalProblemsSolved(data?.data?.totalProblemsSolved);
+        setlanguageWiseAnalysis(data?.data?.languagesSolved);
+        setcodeforcesContestDetails(data?.data?.contestDetails);
+    }
+    
     setRightPaneLoading(false)
    
 }
