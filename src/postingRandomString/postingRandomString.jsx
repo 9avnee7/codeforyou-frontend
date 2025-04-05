@@ -20,8 +20,7 @@ const PostingRandomString = () => {
 
       console.log(`Hour: ${hour}, Meridiem: ${meridiem}`);
 
-      if (hour === "7" && meridiem === "PM") {
-        console.log("Entering if condition");
+      console.log("Entering if condition");
 
         const postUrl = `${import.meta.env.VITE_API_GATEWAY_URL}/string/postOrUpdateRandomString`;
 
@@ -41,7 +40,7 @@ const PostingRandomString = () => {
         } else {
           alert("Error Posting GFG String");
         }
-      }
+      
     } catch (error) {
       console.error("Error fetching or posting data:", error);
     }
