@@ -1,5 +1,5 @@
 import React from 'react';
-// import "./premium.css";
+import "./premium.css";
 import { FaLink, FaMedal, FaFilePdf } from 'react-icons/fa';
 
 const Premium = () => {

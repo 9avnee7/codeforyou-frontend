@@ -36,20 +36,27 @@ export function RegisterPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials:"include",
-        body: JSON.stringify({ username,
-           email,
-           name:userInfo.name,
-           googleId:password,
-           profilePic:userInfo.picture,
+        body: JSON.stringify({ 
+          username,
+          name:userInfo.given_name,
+           email:userInfo.email,
+           googleId:userInfo.googleId,
+           profilePic:[
+            {
+              profileURL:userInfo.picture,
+              publicId:""
+            }
+           ],
            authProvider:'google',
         })
       });
       if(response.ok){
+        console.log("response ok")
         const data=await response.json();
         console.log(data);
         setLoggedIn(true);
         setAccessToken(data.token.accessToken);
-        setUserInfo(data?.data)
+        setUserInfo({userData:data?.data})
         navigate('/dashboard');
       }
 

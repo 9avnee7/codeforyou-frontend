@@ -1,0 +1,149 @@
+/* premium.css */
+
+.premiumWrapper {
+    min-height: 100vh;
+    padding: 2.5rem 1rem;
+    background-color: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5rem;
+  }
+  
+  .premiumHead {
+    font-size: 3rem;
+    font-family: monospace;
+    font-weight: bold;
+    color: #6C63FF;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+  
+  .desc {
+    font-size: 1.125rem;
+    color: #4B5563;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .planCards {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 900px;
+  }
+  
+  .monthly,
+  .yearly {
+    border: 1px solid #e5e7eb;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    flex: 1 1 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  .monthly:hover,
+  .yearly:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .yearly {
+    background-color: #f3f4f6;
+  }
+  
+  .subscribeBtn {
+    background-color: black;
+    color: white;
+    padding: 0.5rem 0;
+    border-radius: 0.5rem;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .subscribeBtn:hover {
+    background-color: #6C63FF;
+  }
+  
+  .premiumBenefits {
+    margin-top: 2.5rem;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 1rem;
+  }
+  
+  .premiumBenefits h2 {
+    font-size: 1.875rem;
+    font-weight: 600;
+    text-align: center;
+    color: #6C63FF;
+    margin-bottom: 1.5rem;
+  }
+  
+  .premiumBenefits ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .premiumBenefits li {
+    display: flex;
+    align-items: start;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .premiumBenefits li span {
+    font-weight: 600;
+  }
+  
+  .premiumBenefits li p {
+    font-size: 0.875rem;
+    color: #6b7280;
+  }
+  
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .planCards {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .premiumHead {
+      font-size: 2.5rem;
+    }
+  
+    .monthly,
+    .yearly {
+      width: 90%;
+    }
+  
+    .premiumBenefits h2 {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .premiumHead {
+      font-size: 2rem;
+    }
+  
+    .desc {
+      font-size: 1rem;
+    }
+  
+    .premiumBenefits h2 {
+      font-size: 1.25rem;
+    }
+  
+    .premiumBenefits li p {
+      font-size: 0.8rem;
+    }
+  }
